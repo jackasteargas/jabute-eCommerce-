@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique Firebase user ID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "photoURL": { "type": "string", "description": "Avatar photo URL" },
+        "role": { "type": "string", "description": "User role: customer or admin" },
+        "createdAt": { "type": "string", "description": "Account creation timestamp" },
+        "lastLoginAt": { "type": "string", "description": "Last sign-in timestamp" },
+        "wishlist": { "type": "array", "description": "Saved product IDs list" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Cart": {
+      "title": "Cart",
+      "description": "User shopping bag state",
+      "type": "object",
+      "properties": {
+        "items": { "type": "array", "description": "List of cart items with quantity, size, color" },
+        "updatedAt": { "type": "string", "description": "Last cart update timestamp" }
+      },
+      "required": ["items"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order records",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique order identifier" },
+        "userId": { "type": "string", "description": "Associated user account ID if authenticated" },
+        "orderNumber": { "type": "string", "description": "Human-friendly order code" },
+        "customer": { "type": "object", "description": "Customer delivery & contact info" },
+        "items": { "type": "array", "description": "Ordered line items" },
+        "subtotal": { "type": "number", "description": "Subtotal amount in USD" },
+        "shippingCost": { "type": "number", "description": "Shipping cost in USD" },
+        "tax": { "type": "number", "description": "Estimated tax amount" },
+        "discount": { "type": "number", "description": "Promo discount applied" },
+        "total": { "type": "number", "description": "Grand total charged" },
+        "status": { "type": "string", "description": "Order fulfillment status" },
+        "paymentMethod": { "type": "string", "description": "Payment type selected" },
+        "createdAt": { "type": "string", "description": "Order placement timestamp" },
+        "trackingNumber": { "type": "string", "description": "Courier tracking number" },
+        "carrier": { "type": "string", "description": "Shipping carrier name" },
+        "estimatedDelivery": { "type": "string", "description": "Estimated delivery window" }
+      },
+      "required": ["id", "orderNumber", "customer", "items", "total", "status"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Verified customer product reviews",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Review unique ID" },
+        "productId": { "type": "string", "description": "Reviewed product ID" },
+        "productName": { "type": "string", "description": "Reviewed product title" },
+        "userId": { "type": "string", "description": "Author user ID" },
+        "author": { "type": "string", "description": "Author display name" },
+        "rating": { "type": "number", "description": "Star rating 1 to 5" },
+        "comment": { "type": "string", "description": "Review text comment" },
+        "verified": { "type": "boolean", "description": "Verified purchaser badge" },
+        "createdAt": { "type": "string", "description": "Submission timestamp" }
+      },
+      "required": ["id", "productId", "rating", "comment"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "/users/{userId}/cart/{cartId}": {
+      "schema": "Cart",
+      "description": "Active shopping cart data for the user"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Order records for store customers"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Public verified product customer reviews"
+    }
+  }
+}
