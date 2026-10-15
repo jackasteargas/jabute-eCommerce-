@@ -7,8 +7,8 @@ export const WishlistView: React.FC = () => {
   const { wishlist, setActiveView } = useShop();
 
   return (
-    <div className="py-8 bg-stone-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="py-8 bg-stone-50 min-h-screen w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 space-y-6">
         
         <div className="flex items-center justify-between">
           <div>
@@ -40,7 +40,7 @@ export const WishlistView: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-6">
             {wishlist.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

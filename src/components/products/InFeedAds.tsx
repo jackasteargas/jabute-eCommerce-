@@ -63,7 +63,7 @@ export const FlashSalePanoramicAd: React.FC<{ onDismiss?: () => void }> = ({ onD
   };
 
   return (
-    <div className="col-span-2 md:col-span-3 my-2 sm:my-3 rounded-2xl sm:rounded-3xl overflow-hidden relative bg-stone-950 text-white border border-amber-500/30 shadow-xl transition-all">
+    <div className="col-span-full my-2 sm:my-3 rounded-2xl sm:rounded-3xl overflow-hidden relative bg-stone-950 text-white border border-amber-500/30 shadow-xl transition-all">
       {/* Background glow and subtle graphic */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />

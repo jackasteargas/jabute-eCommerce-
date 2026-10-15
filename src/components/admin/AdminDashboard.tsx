@@ -15,7 +15,8 @@ import {
   Plus,
   RotateCcw,
   Sparkles,
-  ShieldCheck
+  ShieldCheck,
+  ShieldAlert
 } from 'lucide-react';
 import { AdminOverviewTab } from './AdminOverviewTab';
 import { AdminProductsTab } from './AdminProductsTab';
@@ -33,6 +34,8 @@ type AdminTab = 'overview' | 'products' | 'orders' | 'categories' | 'coupons' | 
 
 export const AdminDashboard: React.FC = () => {
   const {
+    isAdmin,
+    user,
     products,
     categories,
     orders,
@@ -57,6 +60,28 @@ export const AdminDashboard: React.FC = () => {
 
   const [packingSlipOrder, setPackingSlipOrder] = useState<Order | null>(null);
   const [isPackingSlipOpen, setIsPackingSlipOpen] = useState(false);
+
+  // Strict Store Owner Access Guard: Only jackasteargas@gmail.com can view
+  if (!isAdmin || !user || user.email?.toLowerCase().trim() !== 'jackasteargas@gmail.com') {
+    return (
+      <div className="min-h-[75vh] flex flex-col items-center justify-center p-6 text-center bg-stone-50">
+        <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4 shadow-xs">
+          <ShieldAlert className="w-8 h-8" />
+        </div>
+        <h2 className="text-xl sm:text-2xl font-black text-stone-900 tracking-tight">Restricted Store Owner Area</h2>
+        <p className="text-xs sm:text-sm text-stone-500 mt-2 max-w-md leading-relaxed">
+          The Admin Dashboard is strictly reserved for the verified store owner (jackasteargas@gmail.com). You are currently viewing as a store customer.
+        </p>
+        <button
+          onClick={() => setActiveView('home')}
+          className="mt-6 px-6 py-2.5 bg-stone-900 hover:bg-stone-800 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer flex items-center gap-2"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Return to Storefront</span>
+        </button>
+      </div>
+    );
+  }
 
   // Deletion & Action Confirmation Modal State
   const [confirmModal, setConfirmModal] = useState<{
@@ -173,7 +198,7 @@ export const AdminDashboard: React.FC = () => {
     <div className="min-h-screen bg-stone-100 text-stone-900 pb-20">
       {/* Top Admin Header Bar */}
       <div className="bg-stone-900 text-white border-b border-stone-800 sticky top-0 z-30 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 py-3.5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-black shadow-xs">
               <Store className="w-5 h-5" />
@@ -209,7 +234,7 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Tab Navigation Menu */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-2 text-xs font-bold">
             <button
               onClick={() => setActiveTab('overview')}
@@ -299,7 +324,7 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+      <main className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 pt-6">
         {activeTab === 'overview' && (
           <AdminOverviewTab
             onOpenProductModal={handleOpenAddProduct}

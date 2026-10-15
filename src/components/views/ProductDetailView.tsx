@@ -120,8 +120,8 @@ export const ProductDetailView: React.FC = () => {
   };
 
   return (
-    <div className="py-6 sm:py-8 bg-stone-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-6 sm:py-8 bg-stone-50 min-h-screen w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
         
         {/* Back Navigation Breadcrumb */}
         <div className="flex items-center justify-between mb-5 sm:mb-6">
@@ -145,11 +145,41 @@ export const ProductDetailView: React.FC = () => {
           </button>
         </div>
 
+        {/* Mobile Pinned Photo & Price Banner: Always visible on mobile, never scrolls away */}
+        <div className="lg:hidden sticky top-[68px] z-30 bg-white/95 backdrop-blur-md border border-stone-200/90 rounded-2xl p-2.5 mb-4 shadow-sm flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <img
+              src={product.images[selectedImage] || product.images[0]}
+              alt={product.name}
+              className="w-12 h-12 rounded-xl object-cover bg-stone-100 border border-stone-200 shrink-0"
+            />
+            <div className="min-w-0">
+              <h2 className="text-xs font-black text-stone-900 truncate">{product.name}</h2>
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="text-sm font-black text-stone-900">${product.price.toFixed(2)}</span>
+                {product.originalPrice && product.originalPrice > product.price && (
+                  <span className="text-[10px] text-stone-400 line-through">
+                    ${product.originalPrice.toFixed(2)}
+                  </span>
+                )}
+                <span className="text-[10px] font-bold text-emerald-600">In Stock</span>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={() => addToCart(product, quantity, selectedColor, selectedSize)}
+            className="px-3.5 py-2 bg-stone-900 hover:bg-stone-800 text-white text-xs font-black rounded-xl shrink-0 flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+          >
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>Add</span>
+          </button>
+        </div>
+
         {/* 2-Column Split Layout: Sticky Left Column (Photo & Price NEVER scroll) | Scrollable Right Column (Description & Others) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           
           {/* LEFT COLUMN: Sticky Photo Gallery & Price / Purchase Dock (Stays fixed while scrolling) */}
-          <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-24 lg:self-start space-y-4">
+          <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-5.5rem)] lg:overflow-y-auto no-scrollbar space-y-4">
             
             {/* Product Photo Gallery Card */}
             <div className="bg-white rounded-3xl border border-stone-200 p-4 sm:p-5 shadow-2xs space-y-3.5">

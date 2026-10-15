@@ -15,13 +15,23 @@ import { WishlistView } from './components/views/WishlistView';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 
 const MainContent: React.FC = () => {
-  const { activeView } = useShop();
+  const { activeView, setActiveView, isAdmin, user } = useShop();
+
+  const isVerifiedOwner = Boolean(
+    isAdmin && user && user.email?.toLowerCase().trim() === 'jackasteargas@gmail.com'
+  );
+
+  React.useEffect(() => {
+    if (activeView === 'admin' && !isVerifiedOwner) {
+      setActiveView('home');
+    }
+  }, [activeView, isVerifiedOwner, setActiveView]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-stone-50">
+    <div className="flex flex-col min-h-screen bg-stone-50 w-full overflow-x-hidden">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 w-full">
         {activeView === 'home' && <FeaturedProducts />}
 
         {activeView === 'product-detail' && <ProductDetailView />}
@@ -29,7 +39,7 @@ const MainContent: React.FC = () => {
         {activeView === 'order-success' && <OrderSuccessView />}
         {activeView === 'orders' && <OrderHistoryView />}
         {activeView === 'wishlist' && <WishlistView />}
-        {activeView === 'admin' && <AdminDashboard />}
+        {activeView === 'admin' && (isVerifiedOwner ? <AdminDashboard /> : <FeaturedProducts />)}
       </main>
 
       <CartDrawer />

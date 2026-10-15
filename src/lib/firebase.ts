@@ -92,6 +92,16 @@ export function getFriendlyAuthErrorMessage(error: any): string {
 }
 
 /**
+ * Store Owner Admin Email - Strictly reserved for the owner
+ */
+export const ADMIN_EMAIL = 'jackasteargas@gmail.com';
+
+export function isAuthorizedAdmin(email?: string | null): boolean {
+  if (!email || typeof email !== 'string') return false;
+  return email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim();
+}
+
+/**
  * Sign In with Google popup
  */
 export async function signInWithGoogle(): Promise<AuthUser | null> {
@@ -105,7 +115,7 @@ export async function signInWithGoogle(): Promise<AuthUser | null> {
       email: user.email,
       displayName: user.displayName || user.email?.split('@')[0] || 'Store Customer',
       photoURL: user.photoURL,
-      role: user.email?.includes('admin') || user.email === 'jackasteargas@gmail.com' ? 'admin' : 'customer',
+      role: isAuthorizedAdmin(user.email) ? 'admin' : 'customer',
       lastLoginAt: new Date().toISOString(),
       createdAt: user.metadata.creationTime || new Date().toISOString()
     };
@@ -139,7 +149,7 @@ export async function signInWithEmailPassword(email: string, pass: string): Prom
       email: user.email,
       displayName: user.displayName || user.email?.split('@')[0] || 'Store Customer',
       photoURL: user.photoURL,
-      role: user.email?.includes('admin') || user.email === 'jackasteargas@gmail.com' ? 'admin' : 'customer',
+      role: isAuthorizedAdmin(user.email) ? 'admin' : 'customer',
       lastLoginAt: new Date().toISOString(),
       createdAt: user.metadata.creationTime || new Date().toISOString()
     };
@@ -176,7 +186,7 @@ export async function signUpWithEmailPassword(email: string, pass: string, name?
       email: user.email,
       displayName: trimmedName,
       photoURL: null,
-      role: user.email?.includes('admin') || user.email === 'jackasteargas@gmail.com' ? 'admin' : 'customer',
+      role: isAuthorizedAdmin(user.email) ? 'admin' : 'customer',
       lastLoginAt: new Date().toISOString(),
       createdAt: user.metadata.creationTime || new Date().toISOString()
     };

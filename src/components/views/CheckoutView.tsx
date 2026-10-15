@@ -93,8 +93,8 @@ export const CheckoutView: React.FC = () => {
   };
 
   return (
-    <div className="py-8 bg-stone-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 bg-stone-50 min-h-screen w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
         
         {/* Header Back Link */}
         <div className="flex items-center justify-between mb-8">

@@ -22,7 +22,8 @@ export const UserMenu: React.FC = () => {
     setActiveView,
     orders,
     wishlist,
-    addToast
+    addToast,
+    isAdmin
   } = useShop();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -125,7 +126,7 @@ export const UserMenu: React.FC = () => {
                   <Cloud className="w-3 h-3 text-emerald-600" />
                   <span>Firestore Synced</span>
                 </span>
-                {user.role === 'admin' && (
+                {isAdmin && user?.email?.toLowerCase().trim() === 'jackasteargas@gmail.com' && (
                   <span className="px-1.5 py-0.5 bg-amber-400 text-stone-950 font-black uppercase rounded text-[9px]">
                     Admin
                   </span>
@@ -178,7 +179,7 @@ export const UserMenu: React.FC = () => {
                 <span>Account & Cloud Storage</span>
               </button>
 
-              {user.role === 'admin' && (
+              {isAdmin && user?.email?.toLowerCase().trim() === 'jackasteargas@gmail.com' && (
                 <button
                   onClick={() => {
                     setIsOpen(false);

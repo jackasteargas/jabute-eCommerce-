@@ -40,7 +40,9 @@ export const AppMenuDrawer: React.FC = () => {
     wishlist,
     storeSettings,
     addToast,
-    applyPromoCode
+    applyPromoCode,
+    user,
+    isAdmin
   } = useShop();
 
   const [email, setEmail] = useState('');
@@ -97,6 +99,10 @@ export const AppMenuDrawer: React.FC = () => {
   };
 
   const handleNavClick = (view: 'home' | 'orders' | 'wishlist' | 'admin') => {
+    if (view === 'admin' && (!isAdmin || user?.email?.toLowerCase().trim() !== 'jackasteargas@gmail.com')) {
+      addToast('Access Restricted', 'Store management is strictly restricted to verified store owner (jackasteargas@gmail.com).', 'warning');
+      return;
+    }
     if (view === 'home') {
       setSelectedCategory('all');
     }
@@ -428,43 +434,44 @@ export const AppMenuDrawer: React.FC = () => {
                   </div>
                 </div>
 
-                {/* 4. Store Owner Quick Access (from Footer div 2) */}
-                <div className="p-4 sm:p-5 space-y-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
-                    <Store className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Store Management</span>
-                  </h4>
+                {/* 4. Store Owner Quick Access (Visible ONLY to verified store owner jackasteargas@gmail.com) */}
+                {isAdmin && user?.email?.toLowerCase().trim() === 'jackasteargas@gmail.com' && (
+                  <div className="p-4 sm:p-5 space-y-3 bg-amber-500/5 border-y border-amber-500/20">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                      <Store className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Store Owner Management</span>
+                    </h4>
 
-                  <button
-                    onClick={() => handleNavClick('admin')}
-                    className={`w-full p-3 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
-                      activeView === 'admin'
-                        ? 'bg-amber-400 text-stone-950 shadow-sm'
-                        : 'bg-stone-800 hover:bg-stone-750 text-amber-300 border border-amber-400/30'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Store className="w-4 h-4 text-amber-400" />
-                      <div className="text-left">
-                        <span className="block leading-none">Owner Admin Dashboard</span>
-                        <span className="text-[10px] text-stone-400 font-normal">Manage products, stock & orders</span>
+                    <button
+                      onClick={() => handleNavClick('admin')}
+                      className={`w-full p-3 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                        activeView === 'admin'
+                          ? 'bg-amber-400 text-stone-950 shadow-sm'
+                          : 'bg-stone-800 hover:bg-stone-750 text-amber-300 border border-amber-400/30'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Store className="w-4 h-4 text-amber-400" />
+                        <div className="text-left">
+                          <span className="block leading-none">Owner Admin Dashboard</span>
+                          <span className="text-[10px] text-stone-400 font-normal">Manage products, stock & orders</span>
+                        </div>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-stone-400" />
+                    </button>
+
+                    <div className="grid grid-cols-2 gap-2 text-[11px] text-stone-400 pt-1">
+                      <div className="flex items-center gap-1.5 bg-stone-950/60 p-2 rounded-lg border border-stone-800/80">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>Single-Seller Store</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 bg-stone-950/60 p-2 rounded-lg border border-stone-800/80">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>Verified Inventory</span>
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-stone-400" />
-                  </button>
-
-                  <div className="grid grid-cols-2 gap-2 text-[11px] text-stone-400 pt-1">
-                    <div className="flex items-center gap-1.5 bg-stone-950/60 p-2 rounded-lg border border-stone-800/80">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Single-Seller Store</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-stone-950/60 p-2 rounded-lg border border-stone-800/80">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Verified Inventory</span>
-                    </div>
                   </div>
-
-                </div>
+                )}
 
                 {/* 5. Brand Heritage & Trust Badges (from Footer div 2) */}
                 <div className="p-4 sm:p-5 space-y-3">

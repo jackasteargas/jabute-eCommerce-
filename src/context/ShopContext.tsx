@@ -16,13 +16,16 @@ import {
   saveOrderToFirestore,
   fetchFirestoreOrders,
   updateFirestoreOrderStatus,
-  syncUserProfile
+  syncUserProfile,
+  isAuthorizedAdmin,
+  ADMIN_EMAIL
 } from '../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
 export interface ShopContextType {
   // Authentication & Profile (Firebase)
   user: AuthUser | null;
+  isAdmin: boolean;
   authLoading: boolean;
   loginWithGoogle: () => Promise<AuthUser | null>;
   loginWithEmail: (email: string, pass: string) => Promise<AuthUser>;
@@ -556,7 +559,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           email: firebaseUser.email,
           displayName: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Store Customer',
           photoURL: firebaseUser.photoURL,
-          role: firebaseUser.email?.includes('admin') || firebaseUser.email === 'jackasteargas@gmail.com' ? 'admin' : 'customer',
+          role: isAuthorizedAdmin(firebaseUser.email) ? 'admin' : 'customer',
           lastLoginAt: new Date().toISOString(),
           createdAt: firebaseUser.metadata.creationTime || new Date().toISOString()
         };
@@ -1210,10 +1213,13 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, [orders, products]);
 
+  const isAdmin = Boolean(user && isAuthorizedAdmin(user.email));
+
   return (
     <ShopContext.Provider
       value={{
         user,
+        isAdmin,
         authLoading,
         loginWithGoogle,
         loginWithEmail,

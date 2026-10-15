@@ -13,8 +13,8 @@ export const OrderHistoryView: React.FC = () => {
   );
 
   return (
-    <div className="py-8 bg-stone-50 min-h-screen">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="py-8 bg-stone-50 min-h-screen w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 space-y-6">
         
         {/* Navigation & Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

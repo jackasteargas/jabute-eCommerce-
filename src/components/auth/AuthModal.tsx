@@ -41,7 +41,8 @@ export const AuthModal: React.FC = () => {
     orders,
     wishlist,
     cartCount,
-    addToast
+    addToast,
+    isAdmin
   } = useShop();
 
   const [activeTab, setActiveTab] = useState<AuthTab>('signin');
@@ -301,7 +302,7 @@ export const AuthModal: React.FC = () => {
                       <h4 className="font-extrabold text-sm sm:text-base text-stone-900 truncate">
                         {user.displayName || 'Valued Customer'}
                       </h4>
-                      {user.role === 'admin' && (
+                      {isAdmin && user?.email?.toLowerCase().trim() === 'jackasteargas@gmail.com' && (
                         <span className="px-2 py-0.5 bg-amber-400 text-stone-950 text-[10px] font-black uppercase rounded-md tracking-wider">
                           Admin
                         </span>

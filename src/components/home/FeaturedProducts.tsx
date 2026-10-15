@@ -31,8 +31,8 @@ export const FeaturedProducts: React.FC = () => {
   };
 
   return (
-    <section id="jabute-catalog" className="py-8 sm:py-10 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="jabute-catalog" className="py-8 sm:py-10 bg-white w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
         
         {/* Section Header with Quick Counts */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3 border-b border-stone-200 pb-4">
@@ -90,7 +90,7 @@ export const FeaturedProducts: React.FC = () => {
         {/* Dynamic Editorial Non-Uniform Grid with Smooth In-Feed Ads */}
         {displayedProducts.length > 0 ? (
           <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-5 lg:gap-6 items-stretch">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-5 lg:gap-6 items-stretch">
               {(() => {
                 const elements: React.ReactNode[] = [];
                 // Asymmetric showcase cards to break the 3-3-3 pattern

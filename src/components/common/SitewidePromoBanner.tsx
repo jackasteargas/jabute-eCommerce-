@@ -286,7 +286,7 @@ export const SitewidePromoBanner: React.FC = () => {
   if (isDismissed) {
     return (
       <div className="bg-stone-900 border-b border-stone-800 py-1 px-4 text-xs transition-all">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-stone-400">
+        <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-10 flex items-center justify-between text-stone-400">
           <button
             onClick={handleReopen}
             className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-400 hover:text-amber-300 transition-colors cursor-pointer group"
@@ -329,7 +329,7 @@ export const SitewidePromoBanner: React.FC = () => {
       role="region"
       aria-label="Sitewide Promotion"
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5">
+      <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-10 py-2 sm:py-2.5">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           
           {/* Left Arrow (Carousel) */}
