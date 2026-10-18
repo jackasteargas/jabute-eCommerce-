@@ -1,0 +1,6 @@
+{
+  "name": "JABUTE - Online Retail Store",
+  "description": "Official JABUTE independent online retail store featuring premium electronics, computers, fashion, home essentials, tools, and fast direct fulfillment.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
