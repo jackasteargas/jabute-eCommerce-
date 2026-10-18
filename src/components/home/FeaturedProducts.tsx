@@ -35,25 +35,25 @@ export const FeaturedProducts: React.FC = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
         
         {/* Section Header with Quick Counts */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3 border-b border-stone-200 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3 border-b border-stone-200 pb-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-amber-600">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-amber-600">
+              <Sparkles className="w-4 h-4" />
               <span>Direct Store Catalog</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-stone-900 tracking-tight mt-0.5">
+            <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight mt-0.5">
               {currentCategoryTitle}
             </h2>
           </div>
 
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1.5 text-xs text-amber-900 bg-amber-50 border border-amber-200/80 px-2.5 py-1.5 rounded-lg font-medium">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span className="hidden sm:inline font-bold">Interactive Offers Feed</span>
-              <span className="sm:hidden font-bold">Deals Active</span>
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-900 bg-amber-50 border border-amber-200/80 px-3 py-1.5 rounded-lg font-semibold">
+              <Sparkles className="w-4 h-4 text-amber-600" />
+              <span className="hidden sm:inline">Interactive Offers Feed</span>
+              <span className="sm:hidden">Deals Active</span>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-stone-500 bg-stone-100 px-3 py-1.5 rounded-lg font-medium">
-              <Grid3X3 className="w-3.5 h-3.5 text-stone-700" />
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-stone-600 bg-stone-100 px-3 py-1.5 rounded-lg font-semibold">
+              <Grid3X3 className="w-4 h-4 text-stone-700" />
               <span>
                 <strong className="text-stone-900">{displayedProducts.length}</strong> /{' '}
                 <strong className="text-stone-900">{filteredProducts.length}</strong> items
@@ -67,10 +67,10 @@ export const FeaturedProducts: React.FC = () => {
 
         {/* Real-Time Active Search Banner */}
         {searchQuery.trim() && (
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 bg-amber-50 border border-amber-200/80 rounded-2xl px-4 py-3 text-xs text-amber-900 shadow-2xs">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 bg-amber-50 border border-amber-200/80 rounded-2xl px-4 py-3 text-sm text-amber-900 shadow-2xs">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-amber-200 text-amber-900 flex items-center justify-center font-bold shrink-0">
-                <Search className="w-3.5 h-3.5" />
+              <span className="w-7 h-7 rounded-full bg-amber-200 text-amber-900 flex items-center justify-center font-bold shrink-0">
+                <Search className="w-4 h-4" />
               </span>
               <span>
                 Filtering in real-time for <strong className="font-extrabold text-stone-900">"{searchQuery}"</strong> —{' '}
@@ -79,9 +79,9 @@ export const FeaturedProducts: React.FC = () => {
             </div>
             <button
               onClick={() => setSearchQuery('')}
-              className="inline-flex items-center gap-1 px-3 py-1 bg-white hover:bg-stone-100 text-stone-800 rounded-lg text-xs font-bold border border-amber-200 transition-colors shadow-2xs cursor-pointer"
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-white hover:bg-stone-100 text-stone-800 rounded-lg text-xs sm:text-sm font-bold border border-amber-200 transition-colors shadow-2xs cursor-pointer"
             >
-              <X className="w-3.5 h-3.5 text-stone-500" />
+              <X className="w-4 h-4 text-stone-500" />
               <span>Clear Search</span>
             </button>
           </div>
@@ -137,7 +137,7 @@ export const FeaturedProducts: React.FC = () => {
               <div className="mt-10 text-center">
                 <button
                   onClick={() => setVisibleCount((prev) => prev + 6)}
-                  className="inline-flex items-center gap-2 px-7 py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
                 >
                   <span>Load More Products ({filteredProducts.length - visibleCount} remaining)</span>
                   <ChevronDown className="w-4 h-4" />
@@ -148,18 +148,18 @@ export const FeaturedProducts: React.FC = () => {
         ) : (
           /* Empty Search / Filter State */
           <div className="bg-stone-50 rounded-2xl border border-stone-200 p-10 text-center max-w-lg mx-auto my-6">
-            <div className="w-12 h-12 rounded-xl bg-stone-200/80 text-stone-600 flex items-center justify-center mx-auto mb-3">
-              <PackageSearch className="w-6 h-6" />
+            <div className="w-14 h-14 rounded-2xl bg-stone-200/80 text-stone-600 flex items-center justify-center mx-auto mb-3">
+              <PackageSearch className="w-7 h-7" />
             </div>
-            <h3 className="text-base font-bold text-stone-900 mb-1">No products match your criteria</h3>
-            <p className="text-xs text-stone-500 mb-5 leading-relaxed">
+            <h3 className="text-lg font-bold text-stone-900 mb-1">No products match your criteria</h3>
+            <p className="text-sm text-stone-600 mb-6 leading-relaxed">
               We couldn't find any items matching your active search query or filter range. Try adjusting your filters.
             </p>
             <button
               onClick={resetFilters}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-stone-900 text-white rounded-xl text-xs font-bold hover:bg-stone-800 transition-colors shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-3 bg-stone-900 text-white rounded-xl text-sm font-bold hover:bg-stone-800 transition-colors shadow-xs cursor-pointer"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
+              <RefreshCw className="w-4 h-4" />
               <span>Reset All Filters</span>
             </button>
           </div>

@@ -128,9 +128,9 @@ export const ProductDetailView: React.FC = () => {
           <button
             onClick={() => {
               setActiveView('home');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 0, behavior: 'instant' });
             }}
-            className="flex items-center gap-2 text-xs font-bold text-stone-700 hover:text-stone-900 transition-colors bg-white px-3.5 py-2 rounded-xl border border-stone-200 shadow-2xs cursor-pointer"
+            className="flex items-center gap-2 text-sm font-bold text-stone-700 hover:text-stone-900 transition-colors bg-white px-4 py-2.5 rounded-xl border border-stone-200 shadow-2xs cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Store Catalog</span>
@@ -138,216 +138,188 @@ export const ProductDetailView: React.FC = () => {
 
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 text-xs text-stone-600 hover:text-stone-900 transition-colors bg-white px-3.5 py-2 rounded-xl border border-stone-200 cursor-pointer shadow-2xs font-semibold"
+            className="flex items-center gap-2 text-sm text-stone-700 hover:text-stone-900 transition-colors bg-white px-4 py-2.5 rounded-xl border border-stone-200 cursor-pointer shadow-2xs font-bold"
           >
-            <Share2 className="w-3.5 h-3.5" />
+            <Share2 className="w-4 h-4" />
             <span>Share Product</span>
           </button>
         </div>
 
-        {/* Mobile Pinned Photo & Price Banner: Always visible on mobile, never scrolls away */}
-        <div className="lg:hidden sticky top-[68px] z-30 bg-white/95 backdrop-blur-md border border-stone-200/90 rounded-2xl p-2.5 mb-4 shadow-sm flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <img
-              src={product.images[selectedImage] || product.images[0]}
-              alt={product.name}
-              className="w-12 h-12 rounded-xl object-cover bg-stone-100 border border-stone-200 shrink-0"
-            />
-            <div className="min-w-0">
-              <h2 className="text-xs font-black text-stone-900 truncate">{product.name}</h2>
-              <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="text-sm font-black text-stone-900">${product.price.toFixed(2)}</span>
-                {product.originalPrice && product.originalPrice > product.price && (
-                  <span className="text-[10px] text-stone-400 line-through">
-                    ${product.originalPrice.toFixed(2)}
-                  </span>
-                )}
-                <span className="text-[10px] font-bold text-emerald-600">In Stock</span>
-              </div>
-            </div>
-          </div>
-          <button
-            onClick={() => addToCart(product, quantity, selectedColor, selectedSize)}
-            className="px-3.5 py-2 bg-stone-900 hover:bg-stone-800 text-white text-xs font-black rounded-xl shrink-0 flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
-          >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span>Add</span>
-          </button>
-        </div>
-
-        {/* 2-Column Split Layout: Sticky Left Column (Photo & Price NEVER scroll) | Scrollable Right Column (Description & Others) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        {/* 2-Column Split Layout: Sticky Left Column (Photo & Price STAY PERMANENTLY FIXED) | Scrollable Right Column */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
           
-          {/* LEFT COLUMN: Sticky Photo Gallery & Price / Purchase Dock (Stays fixed while scrolling) */}
-          <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-5.5rem)] lg:overflow-y-auto no-scrollbar space-y-4">
-            
-            {/* Product Photo Gallery Card */}
-            <div className="bg-white rounded-3xl border border-stone-200 p-4 sm:p-5 shadow-2xs space-y-3.5">
-              <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 shadow-inner group">
-                <img
-                  src={product.images[selectedImage] || product.images[0]}
-                  alt={product.name}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                />
-                {product.badge && (
-                  <span className="absolute top-3.5 left-3.5 px-3 py-1 bg-stone-900/90 backdrop-blur-xs text-white text-xs font-extrabold uppercase rounded-lg shadow-xs">
-                    {product.badge}
-                  </span>
-                )}
-                {product.discountPercentage && product.discountPercentage > 0 && (
-                  <span className="absolute top-3.5 right-3.5 px-2.5 py-1 bg-rose-600 text-white font-extrabold text-xs rounded-lg shadow-xs">
-                    -{product.discountPercentage}%
-                  </span>
-                )}
-              </div>
-
-              {/* Thumbnails Row */}
-              {product.images.length > 1 && (
-                <div className="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar">
-                  {product.images.map((img, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setSelectedImage(i)}
-                      className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
-                        selectedImage === i ? 'border-stone-900 ring-2 ring-stone-900/20 scale-105' : 'border-stone-200 opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      <img src={img} alt="" className="w-full h-full object-cover" />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Pinned Price & Instant Order Action Box (Fixed with the Photo) */}
-            <div className="bg-white rounded-3xl border border-stone-200 p-5 sm:p-6 shadow-2xs space-y-4">
+          {/* LEFT COLUMN: Stretches full grid height; inner div is sticky so Photo & Price stay in view */}
+          <div className="lg:col-span-5 xl:col-span-5 relative">
+            <div className="lg:sticky lg:top-24 space-y-4">
               
-              {/* Price & Stock Header */}
-              <div className="flex items-baseline justify-between gap-3 border-b border-stone-100 pb-3.5">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Direct Retail Price</div>
-                  <div className="flex items-baseline gap-2.5 mt-0.5">
-                    <span className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
-                      ${product.price.toFixed(2)}
+              {/* Product Photo Gallery Card */}
+              <div className="bg-white rounded-3xl border border-stone-200 p-4 sm:p-5 shadow-sm space-y-3">
+                <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 shadow-inner group">
+                  <img
+                    src={product.images[selectedImage] || product.images[0]}
+                    alt={product.name}
+                    className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300"
+                  />
+                  {product.badge && (
+                    <span className="absolute top-3.5 left-3.5 px-3 py-1 bg-stone-900/90 backdrop-blur-xs text-white text-xs font-bold uppercase rounded-lg shadow-sm">
+                      {product.badge}
                     </span>
-                    {product.originalPrice && product.originalPrice > product.price && (
-                      <span className="text-sm text-stone-400 line-through font-normal">
-                        ${product.originalPrice.toFixed(2)}
+                  )}
+                  {product.discountPercentage && product.discountPercentage > 0 && (
+                    <span className="absolute top-3.5 right-3.5 px-2.5 py-1 bg-rose-600 text-white font-bold text-xs rounded-lg shadow-sm">
+                      -{product.discountPercentage}%
+                    </span>
+                  )}
+                </div>
+
+                {/* Thumbnails Row */}
+                {product.images.length > 1 && (
+                  <div className="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar">
+                    {product.images.map((img, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setSelectedImage(i)}
+                        className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
+                          selectedImage === i ? 'border-stone-900 ring-2 ring-stone-900/20 scale-105' : 'border-stone-200 opacity-70 hover:opacity-100'
+                        }`}
+                      >
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Pinned Price & Instant Order Action Box (Permanently stays with photo on scroll) */}
+              <div className="bg-white rounded-3xl border border-stone-200 p-5 sm:p-6 shadow-sm space-y-4">
+                
+                {/* Price & Stock Header */}
+                <div className="flex items-baseline justify-between gap-3 border-b border-stone-100 pb-3">
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-stone-400">Direct Retail Price</div>
+                    <div className="flex items-baseline gap-2.5 mt-0.5">
+                      <span className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
+                        ${product.price.toFixed(2)}
                       </span>
-                    )}
+                      {product.originalPrice && product.originalPrice > product.price && (
+                        <span className="text-sm text-stone-400 line-through font-normal">
+                          ${product.originalPrice.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg ${
+                      product.stock > 15 ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-amber-700 bg-amber-50 border border-amber-200'
+                    }`}>
+                      <span className="w-2 h-2 rounded-full bg-current"></span>
+                      <span>{product.stock > 15 ? 'In Stock' : `Only ${product.stock} left`}</span>
+                    </span>
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded-md ${
-                    product.stock > 15 ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-amber-700 bg-amber-50 border border-amber-200'
-                  }`}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
-                    <span>{product.stock > 15 ? 'In Stock' : `Only ${product.stock} left`}</span>
-                  </span>
-                </div>
-              </div>
+                {/* Quantity & Action Buttons */}
+                <div className="space-y-3">
+                  <div className="flex gap-2.5">
+                    {/* Quantity Stepper */}
+                    <div className="flex items-center bg-stone-100 border border-stone-200 rounded-xl px-2 shrink-0">
+                      <button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        className="w-8 h-10 flex items-center justify-center font-bold text-base text-stone-700 hover:text-stone-950 cursor-pointer"
+                        aria-label="Decrease quantity"
+                      >
+                        -
+                      </button>
+                      <span className="w-8 text-center text-sm font-bold text-stone-900">{quantity}</span>
+                      <button
+                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                        className="w-8 h-10 flex items-center justify-center font-bold text-base text-stone-700 hover:text-stone-950 cursor-pointer"
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
 
-              {/* Quantity & Action Buttons */}
-              <div className="space-y-2.5">
-                <div className="flex gap-2.5">
-                  {/* Quantity Stepper */}
-                  <div className="flex items-center bg-stone-100 border border-stone-200 rounded-xl px-2 shrink-0">
+                    {/* Add to Bag Button */}
                     <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-10 flex items-center justify-center font-bold text-stone-700 hover:text-stone-950 cursor-pointer"
-                      aria-label="Decrease quantity"
+                      onClick={() => addToCart(product, quantity, selectedColor, selectedSize)}
+                      className="flex-1 py-3 px-4 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm active:scale-98 cursor-pointer"
                     >
-                      -
+                      <ShoppingBag className="w-4 h-4" />
+                      <span>Add to Bag • ${(product.price * quantity).toFixed(2)}</span>
                     </button>
-                    <span className="w-7 text-center text-xs font-bold text-stone-900">{quantity}</span>
+
+                    {/* Wishlist Button */}
                     <button
-                      onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                      className="w-8 h-10 flex items-center justify-center font-bold text-stone-700 hover:text-stone-950 cursor-pointer"
-                      aria-label="Increase quantity"
+                      onClick={() => toggleWishlist(product)}
+                      className={`p-3 rounded-xl border transition-colors flex items-center justify-center cursor-pointer shrink-0 ${
+                        inWishlist
+                          ? 'bg-rose-50 border-rose-200 text-rose-600'
+                          : 'bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-200'
+                      }`}
+                      title="Save to wishlist"
+                      aria-label="Save to wishlist"
                     >
-                      +
+                      <Heart className={`w-5 h-5 ${inWishlist ? 'fill-rose-500' : ''}`} />
                     </button>
                   </div>
 
-                  {/* Add to Bag Button */}
+                  {/* Instant Checkout Button */}
                   <button
-                    onClick={() => addToCart(product, quantity, selectedColor, selectedSize)}
-                    className="flex-1 py-3 px-4 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
+                    onClick={handleBuyNow}
+                    className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-600 text-stone-950 rounded-xl text-sm font-black flex items-center justify-center gap-2 transition-all shadow-sm active:scale-98 cursor-pointer"
                   >
-                    <ShoppingBag className="w-4 h-4" />
-                    <span>Add to Bag • ${(product.price * quantity).toFixed(2)}</span>
-                  </button>
-
-                  {/* Wishlist Button */}
-                  <button
-                    onClick={() => toggleWishlist(product)}
-                    className={`p-3 rounded-xl border transition-colors flex items-center justify-center cursor-pointer shrink-0 ${
-                      inWishlist
-                        ? 'bg-rose-50 border-rose-200 text-rose-600'
-                        : 'bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-200'
-                    }`}
-                    title="Save to wishlist"
-                    aria-label="Save to wishlist"
-                  >
-                    <Heart className={`w-4 h-4 ${inWishlist ? 'fill-rose-500' : ''}`} />
+                    <Zap className="w-4 h-4 fill-stone-950" />
+                    <span>Instant Checkout</span>
                   </button>
                 </div>
 
-                {/* Instant Checkout Button */}
-                <button
-                  onClick={handleBuyNow}
-                  className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-600 text-stone-950 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-98 cursor-pointer"
-                >
-                  <Zap className="w-4 h-4 fill-stone-950" />
-                  <span>Instant Checkout</span>
-                </button>
-              </div>
+                {/* Direct Store Guarantees */}
+                <div className="grid grid-cols-3 gap-2 text-xs text-stone-600 pt-3 border-t border-stone-100 font-semibold">
+                  <div className="flex items-center gap-1.5">
+                    <Truck className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>Free Ship &gt;$99</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <RotateCcw className="w-4 h-4 text-stone-500 shrink-0" />
+                    <span>30-Day Return</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>1-Yr Warranty</span>
+                  </div>
+                </div>
 
-              {/* Direct Store Guarantees */}
-              <div className="grid grid-cols-3 gap-2 text-[10px] text-stone-500 pt-3 border-t border-stone-100 font-medium">
-                <div className="flex items-center gap-1">
-                  <Truck className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  <span>Free Ship &gt;$99</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <RotateCcw className="w-3.5 h-3.5 text-stone-500 shrink-0" />
-                  <span>30-Day Return</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>1-Yr Warranty</span>
-                </div>
               </div>
 
             </div>
-
           </div>
 
           {/* RIGHT COLUMN: Scrollable Product Details (Description & Others scroll freely) */}
           <div className="lg:col-span-7 xl:col-span-7 space-y-6 sm:space-y-8 min-w-0">
 
             {/* Product Title, Category, Rating & Quick Jump */}
-            <div className="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-2xs space-y-4">
-              <div className="flex items-center justify-between text-xs text-stone-400 font-semibold">
-                <span className="uppercase tracking-widest text-amber-700 font-bold bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200/60">
+            <div className="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm space-y-4">
+              <div className="flex items-center justify-between text-xs sm:text-sm text-stone-500 font-semibold">
+                <span className="uppercase tracking-widest text-amber-700 font-bold bg-amber-50 px-3 py-1 rounded-md border border-amber-200/60">
                   {product.category}
                 </span>
-                <span className="font-mono text-[11px]">SKU: {product.sku}</span>
+                <span className="font-mono text-xs">SKU: {product.sku}</span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight leading-snug">
+              <h1 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight leading-snug">
                 {product.name}
               </h1>
 
               {product.subtitle && (
-                <p className="text-sm text-stone-600 font-medium leading-relaxed">{product.subtitle}</p>
+                <p className="text-base text-stone-600 font-medium leading-relaxed">{product.subtitle}</p>
               )}
 
               {/* Rating & Video Jump */}
-              <div className="flex flex-wrap items-center gap-3 text-xs border-y border-stone-100 py-3">
-                <div className="flex items-center gap-1 text-amber-500 font-bold">
-                  <Star className="w-4 h-4 fill-amber-400" />
+              <div className="flex flex-wrap items-center gap-3 text-sm border-y border-stone-100 py-3.5">
+                <div className="flex items-center gap-1.5 text-amber-500 font-bold">
+                  <Star className="w-4.5 h-4.5 fill-amber-400" />
                   <span>{product.rating.toFixed(1)}</span>
                 </div>
                 <span className="text-stone-300">•</span>
@@ -357,21 +329,21 @@ export const ProductDetailView: React.FC = () => {
                   onClick={() => {
                     document.getElementById('product-videos-section')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="flex items-center gap-1.5 text-stone-700 hover:text-amber-600 font-bold transition-colors cursor-pointer bg-stone-100 hover:bg-amber-50 px-2.5 py-1 rounded-md"
+                  className="flex items-center gap-1.5 text-stone-700 hover:text-amber-600 font-bold transition-colors cursor-pointer bg-stone-100 hover:bg-amber-50 px-3 py-1 rounded-lg"
                 >
-                  <Video className="w-3.5 h-3.5 text-amber-500" />
+                  <Video className="w-4 h-4 text-amber-500" />
                   <span>Watch Videos</span>
                 </button>
               </div>
 
               {/* Color Finish Selection */}
               {product.colors && product.colors.length > 0 && (
-                <div className="space-y-2 pt-1">
-                  <div className="flex justify-between text-xs font-bold text-stone-800">
+                <div className="space-y-2.5 pt-1">
+                  <div className="flex justify-between text-sm font-bold text-stone-800">
                     <span>Color Finish:</span>
-                    <span className="text-stone-500 font-normal">{selectedColor}</span>
+                    <span className="text-stone-600 font-normal">{selectedColor}</span>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2.5">
                     {product.colors.map((c) => (
                       <button
                         key={c.name}
@@ -381,7 +353,7 @@ export const ProductDetailView: React.FC = () => {
                         }`}
                       >
                         <span
-                          className="w-7 h-7 rounded-full block border border-stone-300 shadow-inner"
+                          className="w-8 h-8 rounded-full block border border-stone-300 shadow-inner"
                           style={{ backgroundColor: c.hex }}
                         />
                       </button>
@@ -392,13 +364,13 @@ export const ProductDetailView: React.FC = () => {
             </div>
 
             {/* Description Section (Scrolls naturally) */}
-            <div className="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-2xs space-y-3">
-              <h3 className="text-base font-bold text-stone-900 tracking-tight flex items-center gap-2">
+            <div className="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm space-y-3.5">
+              <h3 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
                 <span>Product Description</span>
               </h3>
-              <div className="prose prose-stone text-xs sm:text-sm text-stone-600 leading-relaxed space-y-3">
+              <div className="prose prose-stone text-sm sm:text-base text-stone-700 leading-relaxed space-y-3.5">
                 <p>{product.description}</p>
-                <p className="text-stone-500">
+                <p className="text-stone-600">
                   Engineered with premium materials for maximum durability and everyday performance. Backed by JABUTE direct-to-consumer quality assurance and 30-day risk-free guarantee.
                 </p>
               </div>
@@ -407,14 +379,14 @@ export const ProductDetailView: React.FC = () => {
             {/* Specifications & Key Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {product.features && (
-                <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-2xs">
-                  <h3 className="text-sm font-bold text-stone-900 mb-3 uppercase tracking-wider text-stone-500">
+                <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm">
+                  <h3 className="text-sm font-bold text-stone-900 mb-3.5 uppercase tracking-wider text-stone-500">
                     Key Features
                   </h3>
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3">
                     {product.features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-xs text-stone-600 leading-relaxed">
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-stone-700 leading-relaxed">
+                        <Check className="w-4.5 h-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -423,13 +395,13 @@ export const ProductDetailView: React.FC = () => {
               )}
 
               {product.specifications && (
-                <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-2xs">
-                  <h3 className="text-sm font-bold text-stone-900 mb-3 uppercase tracking-wider text-stone-500">
+                <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm">
+                  <h3 className="text-sm font-bold text-stone-900 mb-3.5 uppercase tracking-wider text-stone-500">
                     Specifications
                   </h3>
                   <div className="divide-y divide-stone-100">
                     {Object.entries(product.specifications).map(([key, val]) => (
-                      <div key={key} className="py-2 flex items-center justify-between text-xs">
+                      <div key={key} className="py-2.5 flex items-center justify-between text-sm">
                         <span className="text-stone-500">{key}</span>
                         <span className="font-semibold text-stone-900">{val}</span>
                       </div>
@@ -440,51 +412,51 @@ export const ProductDetailView: React.FC = () => {
             </div>
 
             {/* Customer Reviews Section */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-2xs space-y-6">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-sm space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-stone-900">Verified Customer Reviews</h3>
-                  <p className="text-xs text-stone-500">Real feedback from genuine JABUTE store buyers.</p>
+                  <h3 className="text-xl font-bold text-stone-900">Verified Customer Reviews</h3>
+                  <p className="text-sm text-stone-500">Real feedback from genuine JABUTE store buyers.</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex text-amber-400">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400" />
+                      <Star key={i} className="w-4.5 h-4.5 fill-amber-400" />
                     ))}
                   </div>
-                  <span className="text-xs font-black text-stone-900">{product.rating.toFixed(1)} out of 5</span>
+                  <span className="text-sm font-black text-stone-900">{product.rating.toFixed(1)} out of 5</span>
                 </div>
               </div>
 
               {/* Reviews List */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {localReviews.map((rev) => (
-                  <div key={rev.id} className="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="font-bold text-stone-900 flex items-center gap-1.5">
+                  <div key={rev.id} className="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-2.5">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="font-bold text-stone-900 flex items-center gap-2">
                         <span>{rev.author}</span>
                         {rev.verified && (
-                          <span className="text-[10px] text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded font-semibold flex items-center gap-0.5">
-                            <CheckCircle2 className="w-2.5 h-2.5" /> Verified
+                          <span className="text-xs text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-semibold flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" /> Verified
                           </span>
                         )}
                       </div>
-                      <span className="text-[11px] text-stone-400">{rev.date}</span>
+                      <span className="text-xs text-stone-400">{rev.date}</span>
                     </div>
                     <div className="flex text-amber-400">
                       {[...Array(rev.rating)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-amber-400" />
+                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
                       ))}
                     </div>
-                    <p className="text-xs text-stone-600 leading-relaxed">{rev.comment}</p>
+                    <p className="text-sm text-stone-700 leading-relaxed">{rev.comment}</p>
                   </div>
                 ))}
               </div>
 
               {/* Add Review Form */}
-              <div className="pt-4 border-t border-stone-100">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3">Write a Product Review</h4>
-                <form onSubmit={handleAddReview} className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+              <div className="pt-5 border-t border-stone-100">
+                <h4 className="text-sm font-bold uppercase tracking-wider text-stone-500 mb-3.5">Write a Product Review</h4>
+                <form onSubmit={handleAddReview} className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-sm">
                   <div className="sm:col-span-4">
                     <input
                       type="text"
@@ -492,14 +464,14 @@ export const ProductDetailView: React.FC = () => {
                       placeholder="Your Name"
                       value={newReviewAuthor}
                       onChange={(e) => setNewReviewAuthor(e.target.value)}
-                      className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl"
+                      className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm"
                     />
                   </div>
                   <div className="sm:col-span-3">
                     <select
                       value={newReviewRating}
                       onChange={(e) => setNewReviewRating(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl font-bold"
+                      className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl font-bold text-sm"
                     >
                       <option value={5}>⭐⭐⭐⭐⭐ 5 Stars</option>
                       <option value={4}>⭐⭐⭐⭐ 4 Stars</option>
@@ -515,11 +487,11 @@ export const ProductDetailView: React.FC = () => {
                       placeholder="Your feedback and experience..."
                       value={newReviewComment}
                       onChange={(e) => setNewReviewComment(e.target.value)}
-                      className="flex-1 px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl"
+                      className="flex-1 px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm"
                     />
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl font-bold cursor-pointer shrink-0"
+                      className="px-5 py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-sm font-bold rounded-xl cursor-pointer shrink-0"
                     >
                       Submit
                     </button>
@@ -540,7 +512,7 @@ export const ProductDetailView: React.FC = () => {
         {/* Related Products Grid */}
         {relatedProducts.length > 0 && (
           <div className="mt-12 sm:mt-16 mb-12">
-            <h3 className="text-lg font-bold text-stone-900 mb-5">You May Also Like in {product.category}</h3>
+            <h3 className="text-xl font-bold text-stone-900 mb-5">You May Also Like in {product.category}</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-6">
               {relatedProducts.map((rel) => (
                 <ProductCard key={rel.id} product={rel} />
@@ -551,25 +523,25 @@ export const ProductDetailView: React.FC = () => {
 
       </div>
 
-      {/* Mobile Sticky Action Dock (On mobile, keeps Photo Thumbnail and Price pinned on screen) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-stone-200 p-3 shadow-xl">
+      {/* Mobile Sticky Action Dock (On mobile, keeps Photo and Price pinned on screen) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/98 backdrop-blur-md border-t border-stone-200 p-3.5 shadow-2xl">
         <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
-          <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex items-center gap-3 min-w-0">
             <img
               src={product.images[selectedImage] || product.images[0]}
               alt={product.name}
-              className="w-10 h-10 rounded-lg object-cover border border-stone-200 shrink-0"
+              className="w-12 h-12 rounded-xl object-cover border border-stone-200 shrink-0"
             />
             <div className="min-w-0">
-              <div className="text-xs font-bold text-stone-900 truncate">{product.name}</div>
-              <div className="text-sm font-black text-stone-900">${product.price.toFixed(2)}</div>
+              <div className="text-sm font-bold text-stone-900 truncate">{product.name}</div>
+              <div className="text-base font-black text-stone-900">${product.price.toFixed(2)}</div>
             </div>
           </div>
           <button
             onClick={() => addToCart(product, quantity, selectedColor, selectedSize)}
-            className="px-4 py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer shrink-0"
+            className="px-5 py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-sm font-bold rounded-xl flex items-center gap-2 shadow-sm active:scale-95 cursor-pointer shrink-0"
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
+            <ShoppingBag className="w-4 h-4" />
             <span>Add to Bag</span>
           </button>
         </div>

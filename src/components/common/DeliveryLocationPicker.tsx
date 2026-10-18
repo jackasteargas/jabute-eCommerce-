@@ -88,22 +88,22 @@ export const DeliveryLocationPicker: React.FC = () => {
       <button
         id="delivery-location-btn"
         onClick={handleOpen}
-        className="flex items-center gap-1 sm:gap-2 px-1.5 py-1 sm:px-2.5 sm:py-1.5 rounded-xl text-left hover:bg-stone-100 active:bg-stone-200/80 transition-all border border-stone-200/80 hover:border-stone-300 shadow-2xs cursor-pointer group shrink-0"
-        title="Tap to change or auto-detect delivery location"
+        className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-xl text-left hover:bg-stone-100 active:bg-stone-200/80 transition-all border border-stone-200/80 hover:border-stone-300 shadow-2xs cursor-pointer group shrink-0"
+        title={`Delivery to: ${displayCity} (Tap to change)`}
         aria-label="Delivery location"
       >
         <div className="relative text-amber-600 group-hover:scale-110 transition-transform shrink-0">
-          <MapPin className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5" />
+          <MapPin className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
           {isDetectingLocation && (
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full animate-ping" />
           )}
         </div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-[9px] sm:text-[10px] text-stone-500 font-medium leading-none flex items-center gap-0.5">
-            <span>Deliver</span>
-            <ChevronDown className="w-2.5 h-2.5 text-stone-400 group-hover:text-stone-700 transition-colors" />
+        <div className="hidden sm:flex flex-col min-w-0">
+          <span className="text-xs text-stone-500 font-medium leading-none flex items-center gap-0.5">
+            <span>Deliver to</span>
+            <ChevronDown className="w-3 h-3 text-stone-400 group-hover:text-stone-700 transition-colors" />
           </span>
-          <span className="text-[11px] sm:text-xs font-bold text-stone-900 leading-tight truncate max-w-[70px] sm:max-w-[130px] mt-0.5 group-hover:text-amber-700 transition-colors">
+          <span className="text-xs font-bold text-stone-900 leading-tight truncate max-w-[120px] lg:max-w-[150px] mt-0.5 group-hover:text-amber-700 transition-colors">
             {displayCity}
           </span>
         </div>

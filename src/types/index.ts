@@ -144,6 +144,12 @@ export interface Order {
   total: number;
   status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
   paymentMethod: 'credit_card' | 'apple_pay' | 'google_pay' | 'cash_on_delivery';
+  paymentStatus?: 'verified' | 'paid' | 'pending';
+  transactionId?: string;
+  authorizationCode?: string;
+  cardLast4?: string;
+  cardBrand?: string;
+  verifiedAt?: string;
   deliveryOption?: 'standard' | 'express' | 'same_day';
   trackingNumber?: string;
   carrier?: string;

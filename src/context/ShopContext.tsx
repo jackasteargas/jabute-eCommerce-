@@ -142,7 +142,7 @@ export interface ShopContextType {
   // Orders & Store Admin Management
   orders: Order[];
   lastPlacedOrder: Order | null;
-  placeOrder: (customer: any, paymentMethod: any, deliveryOption?: any) => Promise<Order>;
+  placeOrder: (customer: any, paymentMethod: any, deliveryOption?: any, paymentDetails?: any) => Promise<Order>;
   updateOrderStatus: (orderId: string, status: Order['status'], trackingNumber?: string, carrier?: string) => void;
   deleteOrder: (orderId: string) => void;
 
@@ -879,7 +879,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const viewProductDetail = (productId: string) => {
     setSelectedProductId(productId);
     setActiveView('product-detail');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
   };
 
   // Filter actions
@@ -1104,7 +1104,12 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   // Order Operations
-  const placeOrder = async (customer: any, paymentMethod: any, deliveryOption: any = 'standard'): Promise<Order> => {
+  const placeOrder = async (
+    customer: any,
+    paymentMethod: any,
+    deliveryOption: any = 'standard',
+    paymentDetails: any = {}
+  ): Promise<Order> => {
     const tax = cartSubtotal * 0.07;
     const finalTotal = Math.max(0, cartSubtotal - discountAmount + shippingCost + tax);
 
@@ -1147,6 +1152,12 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       total: finalTotal,
       status: 'Processing',
       paymentMethod,
+      paymentStatus: 'verified',
+      transactionId: paymentDetails.transactionId || `TXN-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+      authorizationCode: paymentDetails.authorizationCode || `AUTH-${Math.floor(100000 + Math.random() * 900000)}`,
+      cardBrand: paymentDetails.cardBrand || (paymentMethod === 'apple_pay' ? 'Apple Pay' : paymentMethod === 'google_pay' ? 'Google Pay' : 'Visa'),
+      cardLast4: paymentDetails.cardLast4 || '4242',
+      verifiedAt: new Date().toISOString(),
       deliveryOption,
       trackingNumber: `TRK-${Math.floor(100000 + Math.random() * 900000)}-US`,
       carrier: deliveryOption === 'express' ? 'FedEx Express' : 'USPS Priority',

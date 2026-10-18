@@ -28,7 +28,7 @@ const MainContent: React.FC = () => {
   }, [activeView, isVerifiedOwner, setActiveView]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-stone-50 w-full overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-stone-50 w-full">
       <Header />
 
       <main className="flex-1 w-full">
