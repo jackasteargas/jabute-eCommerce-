@@ -14,7 +14,10 @@ import {
   Smartphone,
   Building,
   KeyRound,
-  AlertCircle
+  AlertCircle,
+  Navigation,
+  MapPin,
+  Loader2
 } from 'lucide-react';
 
 export const CheckoutView: React.FC = () => {
@@ -32,39 +35,51 @@ export const CheckoutView: React.FC = () => {
     placeOrder,
     setActiveView,
     addToast,
-    deliveryLocation
+    deliveryLocation,
+    detectUserLocation,
+    isDetectingLocation: isDetectingLocationGlobal
   } = useShop();
 
-  const [fullName, setFullName] = useState(user?.displayName || 'Alex Mercer');
-  const [email, setEmail] = useState(user?.email || 'alex.mercer@example.com');
-  const [phone, setPhone] = useState('+1 (555) 349-8821');
-  const [address, setAddress] = useState('1042 Montgomery Street, Suite 400');
-  const [city, setCity] = useState(deliveryLocation?.city && deliveryLocation.city !== 'Detecting...' ? deliveryLocation.city : 'San Francisco');
-  const [state, setState] = useState(deliveryLocation?.region || 'CA');
-  const [postalCode, setPostalCode] = useState(deliveryLocation?.postalCode || '94133');
-  const [country, setCountry] = useState(deliveryLocation?.country || 'United States');
+  // Contact Details: Start empty so the user can type their own real details
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
 
-  useEffect(() => {
-    if (user) {
-      if (user.displayName) setFullName(user.displayName);
-      if (user.email) setEmail(user.email);
-    }
-  }, [user]);
+  // Location Details: Auto-filled according to detected location
+  const [city, setCity] = useState(
+    deliveryLocation?.city && deliveryLocation.city !== 'Detecting...' ? deliveryLocation.city : ''
+  );
+  const [state, setState] = useState(deliveryLocation?.region || '');
+  const [postalCode, setPostalCode] = useState(deliveryLocation?.postalCode || '');
+  const [country, setCountry] = useState(
+    deliveryLocation?.country && deliveryLocation.country !== 'Global' ? deliveryLocation.country : ''
+  );
 
+  // Sync location details automatically whenever detected location updates
   useEffect(() => {
-    if (deliveryLocation?.city && deliveryLocation.city !== 'Detecting...') {
-      setCity(deliveryLocation.city);
-      if (deliveryLocation.postalCode) setPostalCode(deliveryLocation.postalCode);
-      if (deliveryLocation.country) setCountry(deliveryLocation.country);
-      if (deliveryLocation.region) setState(deliveryLocation.region);
+    if (deliveryLocation) {
+      if (deliveryLocation.city && deliveryLocation.city !== 'Detecting...') {
+        setCity(deliveryLocation.city);
+      }
+      if (deliveryLocation.postalCode) {
+        setPostalCode(deliveryLocation.postalCode);
+      }
+      if (deliveryLocation.country && deliveryLocation.country !== 'Global') {
+        setCountry(deliveryLocation.country);
+      }
+      if (deliveryLocation.region) {
+        setState(deliveryLocation.region);
+      }
     }
   }, [deliveryLocation]);
 
   const [paymentMethod, setPaymentMethod] = useState<'credit_card' | 'apple_pay' | 'google_pay' | 'cash_on_delivery'>('credit_card');
-  const [cardNumber, setCardNumber] = useState('4532 8842 9012 4242');
-  const [cardHolder, setCardHolder] = useState(user?.displayName || 'Alex Mercer');
-  const [cardExpiry, setCardExpiry] = useState('12/28');
-  const [cardCvc, setCardCvc] = useState('883');
+  // Payment card details: Start empty with clear placeholders
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvc, setCardCvc] = useState('');
   const [promoInput, setPromoInput] = useState('');
   
   // Verification states
@@ -181,8 +196,8 @@ export const CheckoutView: React.FC = () => {
   };
 
   return (
-    <div className="py-8 bg-stone-50 min-h-screen w-full">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+    <div className="py-6 sm:py-8 bg-stone-50 min-h-screen w-full">
+      <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-10">
         
         {/* Header Back Link */}
         <div className="flex items-center justify-between mb-8">
@@ -276,7 +291,7 @@ export const CheckoutView: React.FC = () => {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium"
-                      placeholder="e.g. John Doe"
+                      placeholder="Enter your full name"
                     />
                   </div>
                   <div>
@@ -287,7 +302,7 @@ export const CheckoutView: React.FC = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium"
-                      placeholder="you@example.com"
+                      placeholder="Enter your email address"
                     />
                   </div>
                   <div className="sm:col-span-2">
@@ -298,21 +313,54 @@ export const CheckoutView: React.FC = () => {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium"
-                      placeholder="+1 (555) 000-0000"
+                      placeholder="Enter your phone number"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Step 2: Shipping Destination */}
+              {/* Step 2: Shipping & Delivery Location */}
               <div className="bg-white rounded-3xl p-6 sm:p-7 border border-stone-200 shadow-sm space-y-4">
-                <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-amber-700">
-                    Step 2: Shipping Destination
-                  </h3>
-                  <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
-                    Verified Address
-                  </span>
+                <div className="flex flex-wrap items-center justify-between border-b border-stone-100 pb-3 gap-2">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-amber-600" />
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-amber-700">
+                      Step 2: Shipping & Delivery Location
+                    </h3>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Auto-filled from Detected Location</span>
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const loc = await detectUserLocation();
+                          if (loc.city) setCity(loc.city);
+                          if (loc.postalCode) setPostalCode(loc.postalCode);
+                          if (loc.country && loc.country !== 'Global') setCountry(loc.country);
+                          if (loc.region) setState(loc.region);
+                          addToast('Location Synced', `Updated from GPS: ${loc.city}, ${loc.country}`, 'success');
+                        } catch {
+                          addToast('GPS Check', 'Current detected location is already active.', 'info');
+                        }
+                      }}
+                      disabled={isDetectingLocationGlobal}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                      title="Re-detect GPS location"
+                    >
+                      {isDetectingLocationGlobal ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-600" />
+                      ) : (
+                        <Navigation className="w-3.5 h-3.5 text-amber-600" />
+                      )}
+                      <span>Re-detect GPS</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-4">
@@ -324,56 +372,77 @@ export const CheckoutView: React.FC = () => {
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                       className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium"
-                      placeholder="123 Market St, Apt 4B"
+                      placeholder="Enter street address & apartment/unit number"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-bold text-stone-800 mb-1.5">City *</label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-sm font-bold text-stone-800">City *</label>
+                        {city && (
+                          <span className="text-[11px] font-semibold text-emerald-700">Detected</span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         required
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
+                        placeholder="City"
                         className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-stone-800 mb-1.5">State / Province</label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-sm font-bold text-stone-800">State / Region</label>
+                        {state && (
+                          <span className="text-[11px] font-semibold text-emerald-700">Detected</span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         value={state}
                         onChange={(e) => setState(e.target.value)}
+                        placeholder="State / Region"
                         className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium"
                       />
                     </div>
                     <div className="col-span-2 sm:col-span-1">
-                      <label className="block text-sm font-bold text-stone-800 mb-1.5">Postal Code *</label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-sm font-bold text-stone-800">Postal Code *</label>
+                        {postalCode && (
+                          <span className="text-[11px] font-semibold text-emerald-700">Detected</span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         required
                         value={postalCode}
                         onChange={(e) => setPostalCode(e.target.value)}
+                        placeholder="Postal Code"
                         className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium font-mono"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-stone-800 mb-1.5">Country / Region</label>
-                    <select
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-sm font-bold text-stone-800">Country / Region *</label>
+                      {country && (
+                        <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          Auto-filled: {country}
+                        </span>
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      required
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium cursor-pointer"
-                    >
-                      <option value="United States">United States</option>
-                      <option value="Canada">Canada</option>
-                      <option value="United Kingdom">United Kingdom</option>
-                      <option value="Germany">Germany</option>
-                      <option value="Japan">Japan</option>
-                      <option value="Australia">Australia</option>
-                    </select>
+                      placeholder="Country (auto-filled according to detected location)"
+                      className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-stone-900 font-medium"
+                    />
                   </div>
                 </div>
               </div>
@@ -433,7 +502,7 @@ export const CheckoutView: React.FC = () => {
                         required
                         value={cardHolder}
                         onChange={(e) => setCardHolder(e.target.value)}
-                        placeholder="John Doe"
+                        placeholder="Full name as shown on card"
                         className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-stone-900"
                       />
                     </div>
@@ -451,7 +520,7 @@ export const CheckoutView: React.FC = () => {
                           required
                           value={cardNumber}
                           onChange={(e) => handleCardNumberChange(e.target.value)}
-                          placeholder="4532 8842 9012 4242"
+                          placeholder="Card number (16 digits)"
                           className="w-full px-4 py-2.5 text-sm bg-stone-50 border border-stone-200 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-stone-900"
                         />
                         <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">

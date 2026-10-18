@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useShop } from '../../context/ShopContext';
 import { ProductCard } from '../products/ProductCard';
-import { ProductVideoSection } from '../products/ProductVideoSection';
 import { saveReviewToFirestore, fetchProductReviews } from '../../lib/firebase';
 import {
   ArrowLeft,
@@ -121,7 +120,7 @@ export const ProductDetailView: React.FC = () => {
 
   return (
     <div className="py-6 sm:py-8 bg-stone-50 min-h-screen w-full">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+      <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-10">
         
         {/* Back Navigation Breadcrumb */}
         <div className="flex items-center justify-between mb-5 sm:mb-6">
@@ -498,11 +497,6 @@ export const ProductDetailView: React.FC = () => {
                   </div>
                 </form>
               </div>
-            </div>
-
-            {/* Video Showcase Section */}
-            <div id="product-videos-section">
-              <ProductVideoSection product={product} />
             </div>
 
           </div>

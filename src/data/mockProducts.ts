@@ -159,7 +159,7 @@ export const MOCK_PRODUCTS: Product[] = [
   // 3. Computers
   {
     id: 'jab-comp-1',
-    name: 'ApexCraft 75% Mechanical Keyboard (Gasket Mount)',
+    name: 'JABUTE Craft 75% Mechanical Keyboard (Gasket Mount)',
     subtitle: 'Hot-Swappable RGB, Lubed Linear Switches & PBT Keycaps',
     description: 'CNC anodized solid aluminum chassis featuring a flexible poron gasket mount, pre-lubricated custom linear switches, south-facing per-key RGB backlighting, and triple connectivity (2.4GHz / Bluetooth 5.1 / Type-C).',
     price: 159.00,

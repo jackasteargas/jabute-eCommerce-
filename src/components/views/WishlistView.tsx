@@ -7,8 +7,8 @@ export const WishlistView: React.FC = () => {
   const { wishlist, setActiveView } = useShop();
 
   return (
-    <div className="py-8 bg-stone-50 min-h-screen w-full">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 space-y-6">
+    <div className="py-6 sm:py-8 bg-stone-50 min-h-screen w-full">
+      <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-10 space-y-6">
         
         <div className="flex items-center justify-between">
           <div>

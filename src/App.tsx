@@ -28,10 +28,10 @@ const MainContent: React.FC = () => {
   }, [activeView, isVerifiedOwner, setActiveView]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-stone-50 w-full">
+    <div className="flex flex-col min-h-screen bg-stone-50 w-full m-0 p-0 overflow-x-hidden">
       <Header />
 
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full m-0 p-0">
         {activeView === 'home' && <FeaturedProducts />}
 
         {activeView === 'product-detail' && <ProductDetailView />}

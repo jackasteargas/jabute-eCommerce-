@@ -31,8 +31,8 @@ export const FeaturedProducts: React.FC = () => {
   };
 
   return (
-    <section id="jabute-catalog" className="py-8 sm:py-10 bg-white w-full">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+    <section id="jabute-catalog" className="py-6 sm:py-8 bg-white w-full">
+      <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-10">
         
         {/* Section Header with Quick Counts */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3 border-b border-stone-200 pb-4">

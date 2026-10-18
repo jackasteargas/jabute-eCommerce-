@@ -208,7 +208,7 @@ const INITIAL_ORDERS: Order[] = [
     items: [
       {
         productId: 'jab-comp-1',
-        name: 'ApexCraft 75% Mechanical Keyboard',
+        name: 'JABUTE Craft 75% Mechanical Keyboard',
         price: 159.00,
         costPrice: 65.00,
         quantity: 1,

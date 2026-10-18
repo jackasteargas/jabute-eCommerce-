@@ -24,7 +24,7 @@ export const CustomerReviews: React.FC = () => {
     {
       name: 'Devon Wright',
       role: 'Software Architect',
-      productName: 'Apex Precision Mechanical Keyboard',
+      productName: 'JABUTE Precision Mechanical Keyboard',
       rating: 5,
       comment: 'The acoustic gasket dampening makes typing an absolute joy every workday. Solid CNC build that feels like it will last decades.',
       date: '3 weeks ago',
